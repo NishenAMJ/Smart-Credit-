@@ -20,3 +20,4 @@ import { LenderBorrowersService } from './lender_borrowers.service';
 })
 export class LenderMobileModule {}
 
+// This module encapsulates all functionality related to the lender mobile application, including controllers and services for handling mobile-specific endpoints, loan applications, and borrower information. It also provides logging capabilities through the NestJS Logger service.
