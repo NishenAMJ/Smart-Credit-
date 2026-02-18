@@ -19,3 +19,4 @@ import { LenderBorrowersService } from './lender_borrowers.service';
   exports: [LenderMobileService, LenderApplicationsService, LenderBorrowersService], // allows reuse in other modules if needed
 })
 export class LenderMobileModule {}
+
