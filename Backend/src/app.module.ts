@@ -13,6 +13,7 @@ import { ChatModule } from './modules/chat/chat.module';
 import { KycModule } from './modules/kyc/kyc.module';
 import { AdsModule } from './modules/ads/ads.module';
 import { DisputesModule } from './modules/disputes/disputes.module';
+import { ReportsModule } from './modules/reports/reports.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { DisputesModule } from './modules/disputes/disputes.module';
     KycModule,
     AdsModule,
     DisputesModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -413,6 +413,86 @@
       ]
     },
     {
+      "name": "Reports & Analytics",
+      "item": [
+        {
+          "name": "Users Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/admin/reports/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["admin", "reports", "users"]
+            },
+            "description": "Get comprehensive user statistics including total users, active/suspended counts, users by role (admin/borrower/lender), and new users this month."
+          }
+        },
+        {
+          "name": "Loans Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/admin/reports/loans",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["admin", "reports", "loans"]
+            },
+            "description": "Get loan statistics including total loans, active/completed/defaulted counts, total and average loan amounts, pending approvals, and breakdown by status."
+          }
+        },
+        {
+          "name": "Transactions Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/admin/reports/transactions",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["admin", "reports", "transactions"]
+            },
+            "description": "Get transaction analytics including total transactions, success/failed/pending counts, total transaction volume, average transaction amount, and breakdown by type."
+          }
+        },
+        {
+          "name": "Revenue Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/admin/reports/revenue",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["admin", "reports", "revenue"]
+            },
+            "description": "Get revenue analytics including total revenue, monthly revenue, yearly revenue, platform fees, and revenue breakdown by month for the last 12 months."
+          }
+        },
+        {
+          "name": "Dashboard Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/admin/analytics/dashboard",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["admin", "analytics", "dashboard"]
+            },
+            "description": "Get comprehensive dashboard analytics with overview (total users/loans/revenue/disputes), recent activity (today's metrics), trends (growth rates), and system alerts."
+          }
+        }
+      ]
+    },
+    {
       "name": "Error Scenarios",
       "item": [
         {
