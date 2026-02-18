@@ -1,28 +1,22 @@
 import { Module, Global } from '@nestjs/common';
 import * as admin from 'firebase-admin';
-import { firebaseConfig } from './firebase.config';
+import * as serviceAccount from '../../firebase-service-account.json';
 import { FirebaseService } from './firebase.service';
 
-@Global() // Makes Firebase available everywhere without re-importing
+@Global()
 @Module({
   providers: [
     {
       provide: 'FIREBASE_APP',
       useFactory: () => {
-        try {
-          console.log('Initializing Firebase...');
-          const app = admin.initializeApp({
-            credential: admin.credential.cert(firebaseConfig),
+        if (!admin.apps.length) {
+          admin.initializeApp({
+            credential: admin.credential.cert(
+              serviceAccount as admin.ServiceAccount,
+            ),
           });
-          console.log('✓ Firebase initialized successfully');
-          // Access project_id from the raw config object
-          const projectId = (firebaseConfig as any).project_id;
-          console.log('Project ID:', projectId);
-          return app;
-        } catch (error) {
-          console.error('✗ Firebase initialization failed:', error.message);
-          throw error;
         }
+        return admin.app();
       },
     },
     FirebaseService,
@@ -30,3 +24,4 @@ import { FirebaseService } from './firebase.service';
   exports: ['FIREBASE_APP', FirebaseService],
 })
 export class FirebaseModule {}
+

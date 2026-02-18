@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { FirebaseModule } from './firebase/firebase.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './modules/auth/auth.module';
+import { AuthModule } from './modules/admin/admin-auth/auth.module';
 import { BorrowerModule } from './modules/borrower/borrower.module';
 import { LenderModule } from './modules/lender/lender.module';
 import { AdminModule } from './modules/admin/admin.module';
