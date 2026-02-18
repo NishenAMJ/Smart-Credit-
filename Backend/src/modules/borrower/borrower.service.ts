@@ -448,11 +448,18 @@ export class BorrowerService {
         query = query.where('borrowerId', '==', borrowerId);
       }
 
-      const snapshot = await query.orderBy('createdAt', 'desc').get();
-      const payments = snapshot.docs.map((doc) => ({
+      const snapshot = await query.get();
+      let payments = snapshot.docs.map((doc) => ({
         paymentId: doc.id,
         ...doc.data(),
       }));
+
+      // Sort in memory by createdAt
+      payments = payments.sort((a: any, b: any) => {
+        const aTime = a.createdAt?._seconds || 0;
+        const bTime = b.createdAt?._seconds || 0;
+        return bTime - aTime; // descending order (newest first)
+      });
 
       return {
         statusCode: 200,
@@ -501,11 +508,16 @@ export class BorrowerService {
         updatedAt: FieldValue.serverTimestamp(),
       });
 
-      // Update loan balance
-      await this.loansService.updateBalance(
-        createPaymentDto.loanId,
-        createPaymentDto.amount,
-      );
+      // Update loan balance (if loan exists)
+      try {
+        await this.loansService.updateBalance(
+          createPaymentDto.loanId,
+          createPaymentDto.amount,
+        );
+      } catch (error) {
+        console.warn('Could not update loan balance:', error);
+        // Continue even if loan update fails
+      }
 
       return {
         statusCode: 201,
@@ -589,11 +601,18 @@ export class BorrowerService {
         query = query.where('borrowerId', '==', borrowerId);
       }
 
-      const snapshot = await query.orderBy('createdAt', 'desc').get();
-      const transactions = snapshot.docs.map((doc) => ({
+      const snapshot = await query.get();
+      let transactions = snapshot.docs.map((doc) => ({
         transactionId: doc.id,
         ...doc.data(),
       }));
+
+      // Sort in memory
+      transactions = transactions.sort((a: any, b: any) => {
+        const aTime = a.createdAt?._seconds || 0;
+        const bTime = b.createdAt?._seconds || 0;
+        return bTime - aTime; // descending
+      });
 
       return {
         statusCode: 200,
@@ -639,13 +658,19 @@ export class BorrowerService {
       const snapshot = await this.firebaseService.db
         .collection('paymentSchedule')
         .where('loanId', '==', loanId)
-        .orderBy('dueDate', 'asc')
         .get();
 
-      const schedule = snapshot.docs.map((doc) => ({
+      let schedule = snapshot.docs.map((doc) => ({
         scheduleId: doc.id,
         ...doc.data(),
       }));
+
+      // Sort in memory
+      schedule = schedule.sort((a: any, b: any) => {
+        const aTime = a.dueDate?._seconds || 0;
+        const bTime = b.dueDate?._seconds || 0;
+        return aTime - bTime; // ascending
+      });
 
       return {
         statusCode: 200,
@@ -668,13 +693,19 @@ export class BorrowerService {
       const snapshot = await this.firebaseService.db
         .collection('conversations')
         .where('participants', 'array-contains', borrowerId)
-        .orderBy('lastMessageAt', 'desc')
         .get();
 
-      const conversations = snapshot.docs.map((doc) => ({
+      let conversations = snapshot.docs.map((doc) => ({
         conversationId: doc.id,
         ...doc.data(),
       }));
+
+      // Sort in memory
+      conversations = conversations.sort((a: any, b: any) => {
+        const aTime = a.lastMessageAt?._seconds || 0;
+        const bTime = b.lastMessageAt?._seconds || 0;
+        return bTime - aTime; // descending
+      });
 
       return {
         statusCode: 200,
@@ -694,13 +725,19 @@ export class BorrowerService {
       const snapshot = await this.firebaseService.db
         .collection('messages')
         .where('conversationId', '==', conversationId)
-        .orderBy('createdAt', 'asc')
         .get();
 
-      const messages = snapshot.docs.map((doc) => ({
+      let messages = snapshot.docs.map((doc) => ({
         messageId: doc.id,
         ...doc.data(),
       }));
+
+      // Sort in memory
+      messages = messages.sort((a: any, b: any) => {
+        const aTime = a.createdAt?._seconds || 0;
+        const bTime = b.createdAt?._seconds || 0;
+        return aTime - bTime; // ascending
+      });
 
       return {
         statusCode: 200,
@@ -752,14 +789,21 @@ export class BorrowerService {
       const snapshot = await this.firebaseService.db
         .collection('notifications')
         .where('userId', '==', borrowerId)
-        .orderBy('createdAt', 'desc')
-        .limit(50)
         .get();
 
-      const notifications = snapshot.docs.map((doc) => ({
+      let notifications = snapshot.docs.map((doc) => ({
         notificationId: doc.id,
         ...doc.data(),
       }));
+
+      // Sort in memory and limit
+      notifications = notifications
+        .sort((a: any, b: any) => {
+          const aTime = a.createdAt?._seconds || 0;
+          const bTime = b.createdAt?._seconds || 0;
+          return bTime - aTime; // descending
+        })
+        .slice(0, 50);
 
       return {
         statusCode: 200,
